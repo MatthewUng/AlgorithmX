@@ -56,9 +56,10 @@ class Matrix{
             above.below = below;
             below.above = above;
 
+            /*
             if(!iscolheader && !isrowheader){
                 colheader.elements--;
-            }
+            }*/
         }
         
         void deleteHorizontal(){
@@ -67,8 +68,6 @@ class Matrix{
         }
 
         void insertVertical(){
-            //left.right = this;
-            //right.left = this;
             above.below = this;
             below.above = this;
 
@@ -153,6 +152,7 @@ class Matrix{
 
             tempcol.insertbelow(new Node(row, col));
             Node added = tempcol.below;
+            added.colheader.elements++;
             
             Node temprow = row;
             while(temprow.right != row && temprow.right.colheader.rowcolnum<c.y){
@@ -175,11 +175,13 @@ class Matrix{
     void delCol(Node colheader){
         Node temp = colheader.below;
         while(temp != colheader){
+            System.out.println("deleting from delCol");
+            temp.print();
             delRow(temp.rowheader);
             temp = temp.below;
         }
 
-        colheader.deleteHorizontal();
+        colheader.deleteVertical();
     }
 
     /*
@@ -201,9 +203,13 @@ class Matrix{
     void delRow(Node rowheader){
         Node temp = rowheader.right;
         while(temp != rowheader){
-            temp.deleteVertical();
+            System.out.println("deleting from delRow");
+            temp.print();
+            temp.deleteHorizontal();
+            temp.colheader.elements--;
+            temp = temp.right;
         }
-        rowheader.deleteVertical();
+        rowheader.deleteHorizontal();
     }
 
     /*
@@ -214,7 +220,19 @@ class Matrix{
         Node temp = rowheader.right;
         while(temp != rowheader){
             temp.insertVertical();
+            temp.colheader.elements++;
             temp = temp.right;
+        }
+    }
+
+    /*
+     * checks if the matrix is empty or not
+     */
+    boolean empty(){
+        if(mainnode.right == mainnode && mainnode.below == mainnode){
+            return true;
+        } else{
+            return false;
         }
     }
 
@@ -223,12 +241,13 @@ class Matrix{
      */
     void print(){
         System.out.println("\nHeight of: "+h);
-        System.out.println("Width of: "+w);
+        System.out.println("Width of: "+w+"\n");
 
         //iterating through columns
         Node it = mainnode;
         while(it.right != mainnode){
-            System.out.println("Column: "+it.right.rowcolnum);
+            System.out.print("Column: "+it.right.rowcolnum);
+            System.out.println(" with "+it.right.elements+" elements");
 
             //iterate through specific column
             Node colit = it.right;
@@ -284,6 +303,8 @@ class Matrix{
         Matrix m = new Matrix();
         
         m.createMatrix(6, 7, values);
+        Node header = m.mainnode.right;
+        m.delCol(header);
         m.print();
     }
 }
