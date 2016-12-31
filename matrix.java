@@ -46,7 +46,7 @@ class Matrix{
         void insertbelow(Node n){
             n.below = this.below;
             n.above = this;
-            n.rowheader = rowheader;
+            n.colheader = colheader;
 
             below.above = n;
             below = n;
@@ -81,12 +81,23 @@ class Matrix{
             left.right = this;
             right.left = this;
         }
+        
+        void print(){
+            if(iscolheader){
+                System.out.println("col header #"+rowcolnum);
+            } else if(isrowheader){
+                System.out.println("row header #"+rowcolnum);
+            } else {
+                System.out.println("node ("+rowheader.rowcolnum+", "+
+                colheader.rowcolnum+")");
+            }
+        }
     }
 
     /*
      * creates the sparse matrix with the given inputs
      */
-    void createMatrix(int w, int h, LinkedList<Coord> list){
+    void createMatrix(int h, int w, LinkedList<Coord> list){
 
         this.w = w;
         this.h = h;
@@ -97,6 +108,11 @@ class Matrix{
             temp.right = new Node();
             temp.right.iscolheader = true;
             temp.right.rowcolnum = i;
+            temp.right.colheader = temp.right;
+
+            temp.right.left = temp;
+            temp.right.below = temp.right;
+            temp.right.above = temp.right;
             temp = temp.right;
         }
         temp.right = mainnode;
@@ -107,8 +123,14 @@ class Matrix{
             temp.below = new Node();
             temp.below.isrowheader = true;
             temp.below.rowcolnum = j;
+            temp.below.rowheader = temp.below;
+
+            temp.below.above = temp;
+            temp.below.right = temp.below;
+            temp.below.left = temp.below;
             temp = temp.below;
         }
+        temp.below = mainnode;
 
         for(Coord c : list){
             Node col = mainnode;
@@ -122,24 +144,41 @@ class Matrix{
             for(int i = 0; i< c.x; i++){
                 row = row.below;
             }
+
+            System.out.println("Col: " + col.rowcolnum);
+            System.out.println("Row: " + row.rowcolnum);
             
             Node tempcol = col;
-            while(tempcol.below != col || tempcol.below.rowheader.rowcolnum<c.x){
+
+            while(tempcol.below != col && tempcol.below.rowheader.rowcolnum<c.x){
                 tempcol = tempcol.below;
             }
 
-            tempcol.insertbelow(new Node(row, col));
+            System.out.println("tempcol");
+            tempcol.print();
+            tempcol.insertbelow(new Node());
             Node added = tempcol.below;
             
             Node temprow = row;
-            while(temprow.below!=row || temprow.right.colheader.rowcolnum<c.y){
+            while(temprow.right != row && temprow.right.colheader.rowcolnum<c.y){
                 temprow = temprow.right;
             }
                 
+            if(temprow.isrowheader){
+                added.rowheader = temprow;
+            } else {
+                added.rowheader = temprow.rowheader;
+            }
+
             added.left = temprow;
             added.right = temprow.right;
-            temprow.right = added;
+
             temprow.right.left = added;
+            temprow.right = added;
+            added.rowheader.print();
+            added.colheader.print();
+            System.out.println("Printing...");
+            added.print();
         }
 
     }
@@ -198,23 +237,24 @@ class Matrix{
      * prints out the matrix represented
      */
     void print(){
-        System.out.println("Height of: "+h);
+        System.out.println("\nHeight of: "+h);
         System.out.println("Width of: "+w);
 
         //iterating through columns
         Node it = mainnode;
         while(it.right != mainnode){
-            System.out.print("Column: "+it.right.rowcolnum);
+            System.out.println("Column: "+it.right.rowcolnum);
 
             //iterate through specific column
             Node colit = it.right;
             while(colit.below != it.right){
-                System.out.println("("+colit.below.rowheader.rowcolnum+", "+
-                colit.below.colheader.rowcolnum+")");
-
+                colit.print();
+                colit.below.print();
                 colit = colit.below;
             }
+
             it = it.right;
+            System.out.println("");
         }
 
         //iterating through rows
@@ -224,21 +264,21 @@ class Matrix{
 
             Node rowit = it.below;
             while(rowit.right != it.below){
-                System.out.println("("+rowit.right.rowheader.rowcolnum+", "+
-                rowit.below.rowheader.rowcolnum+")");
+                rowit.print();
 
                 rowit = rowit.below;
             }
             it = it.below;
+            System.out.println("");
         }
    }
 
     public static void main(String [] args){
-        System.out.println("testing...");
         // 6 x 7 
         LinkedList<Coord> values = new LinkedList<Coord>();
         values.add(new Coord(1,1));
         values.add(new Coord(2,1));
+        /*
         values.add(new Coord(5,2));
         values.add(new Coord(6,2));
         values.add(new Coord(4,3));
@@ -252,9 +292,11 @@ class Matrix{
         values.add(new Coord(5,6));
         values.add(new Coord(5,7));
         values.add(new Coord(6,7));
+        */
+
         Matrix m = new Matrix();
         
-        m.createMatrix(7, 6, values);
+        m.createMatrix(6, 7, values);
         m.print();
     }
 }
