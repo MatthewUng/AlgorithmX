@@ -146,6 +146,7 @@ class Matrix{
         while(temp != mainnode){
             if(temp.elements < num){
                 out = temp;
+                num = temp.elements;
             }
             temp = temp.right;
         }
@@ -162,6 +163,7 @@ class Matrix{
         Node temp = colheader.below;
         while(temp != colheader){
             out.add(temp.rowheader);
+            temp = temp.below;
         }
         return out;
     }
@@ -170,14 +172,11 @@ class Matrix{
      * checks if the matrix is empty or not
      */
     boolean empty(){
-        Node temp = mainnode.right;
-        while(temp != mainnode){
-            if(temp.elements != 0){
-                return false;
-            }
+        if(mainnode.right == mainnode){ 
+            return true;
+        } else{
+            return false;
         }
-
-        return true;
     }
 
     /*

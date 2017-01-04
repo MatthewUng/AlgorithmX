@@ -12,4 +12,11 @@ class Result{
         this.isSol = isSol;
         this.rows = rows;
     }
+
+    public void print(){
+        System.out.println("result: " + isSol);
+        for(Node row : rows){
+            System.out.println(row.rowcolnum);
+        }
+    }
 }
