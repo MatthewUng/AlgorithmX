@@ -55,30 +55,34 @@ class Matrix{
         void deleteVertical(){
             above.below = below;
             below.above = above;
-
-            /*
-            if(!iscolheader && !isrowheader){
-                colheader.elements--;
-            }*/
         }
         
         void deleteHorizontal(){
             left.right = right;
             right.left = left;
+            if(!isrowheader && !iscolheader){
+                rowheader.elements--;
+            }
+        }
+
+        //TODO not sure if needed
+        void delete(){
+            deleteVertical();
+            deleteHorizontal();
         }
 
         void insertVertical(){
             above.below = this;
             below.above = this;
-
-            if(!iscolheader && !isrowheader){
-                colheader.elements++;
-            }
         }
         
         void insertHorizontal(){
             left.right = this;
             right.left = this;
+
+            if(!isrowheader && !iscolheader){
+                rowheader.elements++;
+            }
         }
         
         void print(){
@@ -110,8 +114,6 @@ class Matrix{
             temp.right.colheader = temp.right;
 
             temp.right.left = temp;
-            temp.right.below = temp.right;
-            temp.right.above = temp.right;
             temp = temp.right;
         }
         temp.right = mainnode;
@@ -125,8 +127,6 @@ class Matrix{
             temp.below.rowheader = temp.below;
 
             temp.below.above = temp;
-            temp.below.right = temp.below;
-            temp.below.left = temp.below;
             temp = temp.below;
         }
         temp.below = mainnode;
@@ -135,7 +135,7 @@ class Matrix{
             Node col = mainnode;
             Node row = mainnode;
 
-            //retrieving the right column
+            //retrieving the right column/row
             for(int i = 0; i < c.y; i++){
                 col = col.right;
             }
@@ -169,19 +169,16 @@ class Matrix{
     }
 
     /*
-     * Takes a node header and deletes the column along with all 
-     * conflicting rows
+     * Deletes a certain column
      */
     void delCol(Node colheader){
         Node temp = colheader.below;
         while(temp != colheader){
-            System.out.println("deleting from delCol");
-            temp.print();
-            delRow(temp.rowheader);
+            temp.deleteHorizontal();
             temp = temp.below;
         }
 
-        colheader.deleteVertical();
+        colheader.deleteHorizontal();
     }
 
     /*
@@ -192,7 +189,7 @@ class Matrix{
         Node temp = colheader.below;
 
         while(temp != colheader){
-            reinsertRow(temp.rowheader);
+            temp.insertHorizontal();
             temp = temp.below;
         }
     }
@@ -203,13 +200,11 @@ class Matrix{
     void delRow(Node rowheader){
         Node temp = rowheader.right;
         while(temp != rowheader){
-            System.out.println("deleting from delRow");
-            temp.print();
-            temp.deleteHorizontal();
-            temp.colheader.elements--;
+            temp.deleteVertical();
+
             temp = temp.right;
         }
-        rowheader.deleteHorizontal();
+        rowheader.deleteVertical();
     }
 
     /*
@@ -220,7 +215,6 @@ class Matrix{
         Node temp = rowheader.right;
         while(temp != rowheader){
             temp.insertVertical();
-            temp.colheader.elements++;
             temp = temp.right;
         }
     }
@@ -296,6 +290,8 @@ class Matrix{
         values.add(new Coord(4,5));
         values.add(new Coord(4,6));
         values.add(new Coord(5,6));
+        values.add(new Coord(1,7));
+        values.add(new Coord(3,7));
         values.add(new Coord(5,7));
         values.add(new Coord(6,7));
         
@@ -303,8 +299,9 @@ class Matrix{
         Matrix m = new Matrix();
         
         m.createMatrix(6, 7, values);
-        Node header = m.mainnode.right;
-        m.delCol(header);
+        Node header = m.mainnode.below;
+        m.delRow(header);
+        //m.reinsertRow(header);
         m.print();
     }
 }
