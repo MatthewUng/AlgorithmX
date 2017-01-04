@@ -4,11 +4,13 @@ import java.util.LinkedList;
  * Sparse matrix implementation
  */
 class Matrix{
-    private Node mainnode = new Node();
+    private Node mainnode;
     public int w, h;
 
     Matrix(){
-
+        mainnode = new Node();
+        mainnode.isrowheader = true;
+        mainnode.iscolheader = true;
     }
     
     // Internal node class
@@ -217,6 +219,37 @@ class Matrix{
             temp.insertVertical();
             temp = temp.right;
         }
+    }
+
+    /*
+     * Returns the column header with the fewest elements
+     */
+    Node optimalColumn(){
+        Node temp = mainnode.right;
+        int num = h;
+        Node out = mainnode;
+
+        while(temp != mainnode){
+            if(temp.elements < num){
+                out = temp;
+            }
+            temp = temp.right;
+        }
+
+        return out
+    }
+
+    /*
+     * Given a colheader, returns an arraylist of all the rows associated with 
+     * the column
+     */
+    LinkedList<Node> optimalRows(Node colheader){
+        LinkedList<Node> out = new LinkedList<Node>;
+        Node temp = colheader.below;
+        while(temp != colheader){
+            out.add(temp.rowheader);
+        }
+        return out;
     }
 
     /*
