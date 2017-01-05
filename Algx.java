@@ -5,7 +5,8 @@ import java.util.Stack;
 class Algx{
     Matrix m;
 
-    Algx(){
+    Algx(Matrix m){
+        this.m = m;
     }
 
     /*
@@ -87,15 +88,6 @@ class Algx{
         return new Result(false, null);
     }
 
-    //TODO is this needed?
-    void setMatrix(Matrix m){
-        this.m = m;
-    }
-
-    void printMatrix(){
-        m.print();
-    }
-    
     public static void main(String [] args){
         System.out.println("Testing...");
 
@@ -121,8 +113,7 @@ class Algx{
         Matrix m = new Matrix();
         m.createMatrix(6, 7, values);
         
-        Algx solver = new Algx();
-        solver.setMatrix(m);
+        Algx solver = new Algx(m);
         Result result = solver.solve();
 
         System.out.println("successful termination");
