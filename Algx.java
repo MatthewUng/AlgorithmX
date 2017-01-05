@@ -5,8 +5,7 @@ import java.util.Stack;
 class Algx{
     Matrix m;
 
-    Algx(Matrix m){
-        this.m = m;
+    Algx(){
     }
 
     /*
@@ -57,7 +56,6 @@ class Algx{
 
     Result solve(){
         //partial solution is actually full solution
-        System.out.println("init solve()");
 
         if(m.empty()){
             return new Result(true, new HashSet<Node>());
@@ -72,9 +70,6 @@ class Algx{
         LinkedList<Node> rows = m.optimalRows(header);
         
         for(Node rowheader : rows){
-            System.out.println("in iterationg of for loop");
-            rowheader.print();
-
             Stack<Node> order = deleteStep(rowheader);
 
             Result partialSol= solve();
@@ -92,6 +87,10 @@ class Algx{
         return new Result(false, null);
     }
 
+    //TODO is this needed?
+    void setMatrix(Matrix m){
+        this.m = m;
+    }
 
     void printMatrix(){
         m.print();
@@ -122,17 +121,12 @@ class Algx{
         Matrix m = new Matrix();
         m.createMatrix(6, 7, values);
         
-        Algx solver = new Algx(m);
-        solver.deleteStep(solver.m.mainnode.below);
-        solver.printMatrix();
-
-
-        /*
+        Algx solver = new Algx();
+        solver.setMatrix(m);
         Result result = solver.solve();
 
         System.out.println("successful termination");
         result.print();
-        */
     }
 
 }

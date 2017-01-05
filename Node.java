@@ -10,8 +10,8 @@ class Node{
     public Node colheader;
     public Node rowheader;
 
-    public boolean iscolheader;
-    public boolean isrowheader;
+    public boolean iscolheader = false;
+    public boolean isrowheader = false;
     public int rowcolnum;
 
     // if the node is a colheader
@@ -46,7 +46,7 @@ class Node{
         above.below = below;
         below.above = above;
         if(!isrowheader && !iscolheader){
-            rowheader.elements--;
+            colheader.elements--;
         }
     }
     
@@ -66,7 +66,7 @@ class Node{
         above.below = this;
         below.above = this;
         if(!isrowheader && !iscolheader){
-            rowheader.elements++;
+            colheader.elements++;
         }
     }
     
