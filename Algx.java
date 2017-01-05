@@ -10,13 +10,23 @@ class Algx{
     }
 
     /*
-     * removes a row and all columns associated with the row
+     * removes a row and all columns/rows associated with the row
      */
     Stack<Node> deleteStep(Node rowheader){
         Stack<Node> order = new Stack<Node>();
         Node temp = rowheader.right;
 
         while(temp != rowheader){
+            Node colit = temp.colheader.below;
+            
+            while(colit != temp.colheader){
+                if(colit.rowheader != rowheader){
+                    order.push(colit.rowheader);
+                    m.delRow(colit.rowheader);
+                }
+                colit = colit.below;
+            }
+
             order.push(temp.colheader);
             m.delCol(temp.colheader);
             temp = temp.right;
@@ -29,13 +39,18 @@ class Algx{
     }
 
     /*
-     * reimplements a row and all columns associated with the row
+     * reimplements a row and all columns/rows associated with the row
      */
     void insertStep(Stack<Node> order){
-        m.reinsertRow(order.pop());
-
         while(!order.empty()){
-            m.reinsertCol(order.pop());
+            Node header = order.pop();
+            if(header.isrowheader){
+                m.reinsertRow(header);
+            } else if(header.iscolheader){
+                m.reinsertCol(header);
+            } else {
+                System.out.println("Error in insertStep()");
+            }
         }
     }
 
@@ -76,6 +91,11 @@ class Algx{
 
         return new Result(false, null);
     }
+
+
+    void printMatrix(){
+        m.print();
+    }
     
     public static void main(String [] args){
         System.out.println("Testing...");
@@ -103,10 +123,16 @@ class Algx{
         m.createMatrix(6, 7, values);
         
         Algx solver = new Algx(m);
+        solver.deleteStep(solver.m.mainnode.below);
+        solver.printMatrix();
+
+
+        /*
         Result result = solver.solve();
 
         System.out.println("successful termination");
         result.print();
+        */
     }
 
 }

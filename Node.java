@@ -45,34 +45,35 @@ class Node{
     void deleteVertical(){
         above.below = below;
         below.above = above;
+        if(!isrowheader && !iscolheader){
+            rowheader.elements--;
+        }
     }
     
     void deleteHorizontal(){
         left.right = right;
         right.left = left;
-        if(!isrowheader && !iscolheader){
-            rowheader.elements--;
-        }
     }
 
     //TODO not sure if needed
+    /*
     void delete(){
         deleteVertical();
         deleteHorizontal();
-    }
+    }*/
 
     void insertVertical(){
         above.below = this;
         below.above = this;
+        if(!isrowheader && !iscolheader){
+            rowheader.elements++;
+        }
     }
     
     void insertHorizontal(){
         left.right = this;
         right.left = this;
 
-        if(!isrowheader && !iscolheader){
-            rowheader.elements++;
-        }
     }
     
     void print(){

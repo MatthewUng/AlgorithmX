@@ -4,7 +4,7 @@ import java.util.LinkedList;
  * Sparse matrix implementation
  */
 class Matrix{
-    private Node mainnode;
+    public Node mainnode;
     public int w, h;
 
     Matrix(){
