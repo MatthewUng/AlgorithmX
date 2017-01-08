@@ -1,4 +1,3 @@
-
 /*
  * Node class for sparse matrix implementation
  */
@@ -54,13 +53,6 @@ class Node{
         left.right = right;
         right.left = left;
     }
-
-    //TODO not sure if needed
-    /*
-    void delete(){
-        deleteVertical();
-        deleteHorizontal();
-    }*/
 
     void insertVertical(){
         above.below = this;
