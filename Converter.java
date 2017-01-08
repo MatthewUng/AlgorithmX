@@ -38,9 +38,9 @@ class Converter{
          */
         LinkedList<Coord> connections = new LinkedList<Coord>();
         //i corresponds with the row
-        for(int i = 0; i<8;i++){
+        for(int i = 0; i<9;i++){
             //j corresponds with the column
-            for(int j = 0; j<8; j++){
+            for(int j = 0; j<9; j++){
                 // 10 => 10(9) - 8
                 // first is the first row associated with grid[i][j]
                 int first = 81*i + 9*j + 1;
@@ -56,8 +56,8 @@ class Converter{
 
                 //col that represents the particular grid box[i][j]
 
-                int gridbox = 3*81*9 + 9*i + j;
-                for(int choice = 0; choice<8;choice++){
+                int gridbox = 3*81 + 9*i + j+1;
+                for(int choice = 0; choice<9; choice++){
 
                     //every row must have all 9
                     Coord toadd = new Coord(first+choice, firstrow+choice);
@@ -76,7 +76,7 @@ class Converter{
             }
         }
         Matrix out = new Matrix();
-        out.createMatrix(9*81, 3*81*9+81, connections);
+        out.createMatrix(9*81, 4*81, connections);
         return out;
     }
 
