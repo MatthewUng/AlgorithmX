@@ -1,10 +1,16 @@
 import java.util.LinkedList;
 
 class Converter{
-    /*
+    
     void Matrix convertSudoku(int[][] grid){
+        Matrix out = createComplete();
 
-    }*/
+    }
+    
+    private int getrow(int i, int j, int value){
+        int first = 81*i + 9*j + 1+ value;
+        return first;
+    }
 
     /*
      * returns the sparse matrix representing all possible combinations

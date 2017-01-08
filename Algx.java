@@ -12,6 +12,7 @@ class Algx{
     /*
      * removes a row and all columns/rows associated with the row
      */
+    /*
     Stack<Node> deleteStep(Node rowheader){
         Stack<Node> order = new Stack<Node>();
         Node temp = rowheader.right;
@@ -36,11 +37,12 @@ class Algx{
         m.delRow(rowheader);
 
         return order;
-    }
+    }*/
 
     /*
      * reimplements a row and all columns/rows associated with the row
      */
+    /*
     void insertStep(Stack<Node> order){
         while(!order.empty()){
             Node header = order.pop();
@@ -52,7 +54,7 @@ class Algx{
                 System.out.println("Error in insertStep()");
             }
         }
-    }
+    }*/
 
 
     Result solve(){
@@ -71,7 +73,7 @@ class Algx{
         LinkedList<Node> rows = m.optimalRows(header);
         
         for(Node rowheader : rows){
-            Stack<Node> order = deleteStep(rowheader);
+            Stack<Node> order = m.deleteStep(rowheader);
 
             Result partialSol= solve();
 
@@ -80,7 +82,7 @@ class Algx{
                 return partialSol;
 
             } else{
-                insertStep(order);
+                m.insertStep(order);
                 continue;
             }
         }

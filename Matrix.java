@@ -1,3 +1,4 @@
+import java.util.Stack;
 import java.util.LinkedList;
 
 /*
@@ -55,6 +56,7 @@ class Matrix{
             for(int i = 0; i < c.y; i++){
                 col = col.right;
             }
+
 
             for(int i = 0; i< c.x; i++){
                 row = row.below;
@@ -166,6 +168,51 @@ class Matrix{
             temp = temp.below;
         }
         return out;
+    }
+
+    /*
+     * removes a row and all columns/rows associated with the row
+     */
+    public Stack<Node> deleteStep(Node rowheader){
+        Stack<Node> order = new Stack<Node>();
+        Node temp = rowheader.right;
+
+        while(temp != rowheader){
+            Node colit = temp.colheader.below;
+            
+            while(colit != temp.colheader){
+                if(colit.rowheader != rowheader){
+                    order.push(colit.rowheader);
+                    delRow(colit.rowheader);
+                }
+                colit = colit.below;
+            }
+
+            order.push(temp.colheader);
+            delCol(temp.colheader);
+            temp = temp.right;
+        }
+
+        order.push(rowheader);
+        delRow(rowheader);
+
+        return order;
+    }
+    
+    /*
+     * reimplements a row and all columns/row associated with the row
+     */
+    public void insertStep(Stack<Node> order){
+        while(!order.empty()){
+            Node header = order.pop();
+            if(header.isrowheader){
+                reinsertRow(header);
+            } else if(header.iscolheader){
+                reinsertCol(header);
+            } else {
+                System.out.println("Error in insertStep()");
+            }
+        }
     }
 
     /*
