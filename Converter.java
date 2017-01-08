@@ -2,14 +2,22 @@ import java.util.LinkedList;
 
 class Converter{
     
-    void Matrix convertSudoku(int[][] grid){
+    public Matrix convertSudoku(int[][] grid){
         Matrix out = createComplete();
-
+        for(int i = 0; i < 9; i++){
+            for(int j = 0; j<9; j++){
+                if(grid[i][j] != 0){
+                    Node header = getrow(i,j, grid[i][j], out);
+                    out.deleteStep(header);
+                }
+            }
+        }
+        return out;
     }
     
-    private int getrow(int i, int j, int value){
-        int first = 81*i + 9*j + 1+ value;
-        return first;
+    private Node getrow(int i, int j, int value, Matrix m){
+        int index = 81*i + 9*j + 1+ value;
+        return m.getNthRow(index);
     }
 
     /*
@@ -82,5 +90,12 @@ class Converter{
         // 7 8 9
 
         return 3*(row/3) +(col/3)+1;
+    }
+
+    public static void main(String[] args){
+        Converter convert = new Converter();
+        Matrix sudoku = convert.createComplete();
+        sudoku.print();
+        System.out.println("done");
     }
 }

@@ -216,6 +216,22 @@ class Matrix{
     }
 
     /*
+     * obtains the nth row of the matrix
+     */
+    public Node getNthRow(int n){
+        Node temp = mainnode;
+        for(int i = 0; i<n; i++){
+            temp = temp.below;
+            if(temp.rowcolnum == n){
+                return temp;
+            } else if(temp == mainnode){
+                return null;
+            }
+        }
+        return null;
+    }
+
+    /*
      * checks if the matrix is empty or not
      */
     boolean empty(){
