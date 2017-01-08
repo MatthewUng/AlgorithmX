@@ -3,7 +3,7 @@ import java.util.HashSet;
 import java.util.Stack;
 
 /* 
- * Algx Object that implements Algoritm X to solve open cover problems
+ * Algx Object that implements Algoritm X to solve exact cover problems
  */
 class Algx{
     Matrix m;

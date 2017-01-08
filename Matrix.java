@@ -284,8 +284,9 @@ class Matrix{
             it = it.below;
             System.out.println("");
         }
-   }
+    }
 
+    // basic test
     public static void main(String [] args){
         // 6 x 7 
         LinkedList<Coord> values = new LinkedList<Coord>();

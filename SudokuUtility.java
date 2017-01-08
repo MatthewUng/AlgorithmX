@@ -1,10 +1,9 @@
-
 import java.util.LinkedList;
 import java.util.HashSet;
 
 /*
  * Utility class that aids in converting Sudoku problems to equivalent 
- * open cover problems.
+ * exact cover problems.
  */
 class SudokuUtility{
     
