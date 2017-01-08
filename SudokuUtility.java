@@ -1,23 +1,99 @@
+
 import java.util.LinkedList;
 import java.util.HashSet;
 
-class Converter{
+/*
+ * Utility class that aids in converting Sudoku problems to equivalent 
+ * open cover problems.
+ */
+class SudokuUtility{
     
-    public Matrix convertSudoku(int[][] grid){
+    /*
+     * converts a unsolved sudoku grid to its sparse matrix equivalent
+     */
+    public static Matrix convertSudoku(int[][] grid){
         Matrix out = createComplete();
         for(int i = 0; i < 9; i++){
             for(int j = 0; j<9; j++){
                 if(grid[i][j] != 0){
                     Node header = getrow(i,j, grid[i][j], out);
+                    if(header == null){
+                        System.out.println("header is null");
+                    }
                     out.deleteStep(header);
                 }
             }
         }
         return out;
     }
-    
-    public static int[] getChoice(int rownum){
+
+    /*
+     * returns the resulting grid from a Result object
+     */
+    public static int[][] getResultGrid(Result result){
+        int[][] display = new int[9][9];
+        int[] result_array = result.getResult();
+
+        for(int row : result_array){
+            int[] temp = getChoice(row);
+            display[temp[0]][temp[1]] = temp[2];
+        }
+        return display;
+    }
+
+    /*
+     * prints out the basic resulting grid to terminal
+     */
+    public static void printResultGrid(int[][] grid){
+        for(int i = 0; i<9; i++){
+            if(i%3 == 0 && i != 0){
+                System.out.println("");
+            }
+
+            for(int j = 0; j<9; j++){
+                if(j%3 == 0 && j != 0){
+                    System.out.print(" ");
+                }
+                if(grid[i][j] == 0){
+                    System.out.print("_");
+                } else {
+                    System.out.print(grid[i][j]);
+                }
+            }
+            System.out.println("");
+        }
+    }
+
+    /*
+     * Merges two grids and returns the result
+     */
+    public static int[][] merge(int[][] first, int[][] second){
+        int[][] out = new int[9][9];
+
+        for(int i = 0; i<9; i++){
+            for(int j = 0; j<9; j++){
+                //error case
+                if(first[i][j] != 0 && second[i][j] != 0){
+                    System.out.println("Error occurred in merge()");
+                }
+                
+                if(first[i][j] != 0){
+                    out[i][j] = first[i][j];
+                } else {
+                    out[i][j] = second[i][j];
+                }
+            }
+        }
+        return out;
+    }
+   
+    /*
+     * returns the choice corresponding to the row header's rowcolnum
+     * output = [i, j, choice]
+     */
+    private static int[] getChoice(int rownum){
         int[] out = new int[3];
+
         for(int i = 0; i<9; i++){
             for(int j = 0; j<9; j++){
                 int first = 81*i+9*j+1;
@@ -32,16 +108,19 @@ class Converter{
         return out;
     }
 
-    
-    private Node getrow(int i, int j, int value, Matrix m){
-        int index = 81*i + 9*j + 1+ value;
+    /*
+     * returns the rowheader for the nth row (based on rowcolnum)
+     */
+    private static Node getrow(int i, int j, int value, Matrix m){
+        //index is rowcolnum of row header
+        int index = 81*i + 9*j + value;
         return m.getNthRow(index);
     }
 
     /*
      * returns the sparse matrix representing all possible combinations
      */
-    private Matrix createComplete(){
+    private static Matrix createComplete(){
         /*
          * rows 1~9 represent grid[0][0]
          * rows 81(9)-8 ~ 81(9) represent grid[8][8]
@@ -98,37 +177,10 @@ class Converter{
         return out;
     }
 
-    static int[][] getResultGrid(Result result){
-        int[][] display = new int[9][9];
-        int[] result_array = result.getResult();
-        for(int row : result_array){
-            int[] temp = getChoice(row);
-            display[temp[0]][temp[1]] = temp[2];
-        }
-        return display;
-    }
-
-    static void printResultGrid(int[][] grid){
-        for(int i = 0; i<9; i++){
-            if(i%3 == 0 && i != 0){
-                System.out.println("");
-            }
-
-            for(int j = 0; j<9; j++){
-                if(j%3 == 0 && j != 0){
-                    System.out.print(" ");
-                }
-                System.out.print(grid[i][j]);
-
-            }
-            System.out.println("");
-        }
-    }
-
     /*
      * returns the box number of the cell
      */
-    int getBox(int row, int col){
+    private static int getBox(int row, int col){
         // 1 2 3
         // 4 5 6 
         // 7 8 9
@@ -136,12 +188,16 @@ class Converter{
     }
 
     public static void main(String[] args){
-        Converter convert = new Converter();
-        Matrix sudoku = convert.createComplete();
+        //Converter convert = new Converter();
+        Matrix sudoku = createComplete();
+        sudoku.print();
+        /*
         Algx solver = new Algx(sudoku);
         Result result = solver.solve();
+        
         int[][] resultgrid = getResultGrid(result);
         printResultGrid(resultgrid);
+        */
     }
 
 }

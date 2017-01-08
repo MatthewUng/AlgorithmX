@@ -2,61 +2,19 @@ import java.util.LinkedList;
 import java.util.HashSet;
 import java.util.Stack;
 
+/* 
+ * Algx Object that implements Algoritm X to solve open cover problems
+ */
 class Algx{
     Matrix m;
 
+    //ctor
     Algx(Matrix m){
         this.m = m;
     }
 
-    /*
-     * removes a row and all columns/rows associated with the row
+    /* Solves the matrix and returns a Result object
      */
-    /*
-    Stack<Node> deleteStep(Node rowheader){
-        Stack<Node> order = new Stack<Node>();
-        Node temp = rowheader.right;
-
-        while(temp != rowheader){
-            Node colit = temp.colheader.below;
-            
-            while(colit != temp.colheader){
-                if(colit.rowheader != rowheader){
-                    order.push(colit.rowheader);
-                    m.delRow(colit.rowheader);
-                }
-                colit = colit.below;
-            }
-
-            order.push(temp.colheader);
-            m.delCol(temp.colheader);
-            temp = temp.right;
-        }
-
-        order.push(rowheader);
-        m.delRow(rowheader);
-
-        return order;
-    }*/
-
-    /*
-     * reimplements a row and all columns/rows associated with the row
-     */
-    /*
-    void insertStep(Stack<Node> order){
-        while(!order.empty()){
-            Node header = order.pop();
-            if(header.isrowheader){
-                m.reinsertRow(header);
-            } else if(header.iscolheader){
-                m.reinsertCol(header);
-            } else {
-                System.out.println("Error in insertStep()");
-            }
-        }
-    }*/
-
-
     Result solve(){
         //partial solution is actually full solution
 
@@ -77,8 +35,8 @@ class Algx{
 
             Result partialSol= solve();
 
-            if(partialSol.isSol){
-                partialSol.rows.add(rowheader);
+            if(partialSol.isSol()){
+                partialSol.addRow(rowheader);
                 return partialSol;
 
             } else{
