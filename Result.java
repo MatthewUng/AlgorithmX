@@ -13,6 +13,16 @@ class Result{
         this.rows = rows;
     }
 
+    public int[] getResult(){
+        int[] out = new int[rows.size()];
+        int counter = 0;
+        for(Node header : rows){
+            out[counter] = header.rowcolnum;
+            counter++;
+        }
+        return out;
+    }
+    
     public void print(){
         System.out.println("result: " + isSol);
         for(Node row : rows){

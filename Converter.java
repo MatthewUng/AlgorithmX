@@ -1,4 +1,5 @@
 import java.util.LinkedList;
+import java.util.HashSet;
 
 class Converter{
     
@@ -14,6 +15,23 @@ class Converter{
         }
         return out;
     }
+    
+    public static int[] getChoice(int rownum){
+        int[] out = new int[3];
+        for(int i = 0; i<9; i++){
+            for(int j = 0; j<9; j++){
+                int first = 81*i+9*j+1;
+                if(rownum - first <= 8 && rownum >= first){
+                    out[0] = i;
+                    out[1] = j;
+                    out[2] = rownum - first + 1;
+                    return out;
+                }
+            }
+        }
+        return out;
+    }
+
     
     private Node getrow(int i, int j, int value, Matrix m){
         int index = 81*i + 9*j + 1+ value;
@@ -80,6 +98,32 @@ class Converter{
         return out;
     }
 
+    static int[][] getResultGrid(Result result){
+        int[][] display = new int[9][9];
+        int[] result_array = result.getResult();
+        for(int row : result_array){
+            int[] temp = getChoice(row);
+            display[temp[0]][temp[1]] = temp[2];
+        }
+        return display;
+    }
+
+    static void printResultGrid(int[][] grid){
+        for(int i = 0; i<9; i++){
+            if(i%3 == 0 && i != 0){
+                System.out.println("");
+            }
+
+            for(int j = 0; j<9; j++){
+                if(j%3 == 0 && j != 0){
+                    System.out.print(" ");
+                }
+                System.out.print(grid[i][j]);
+
+            }
+            System.out.println("");
+        }
+    }
 
     /*
      * returns the box number of the cell
@@ -88,14 +132,16 @@ class Converter{
         // 1 2 3
         // 4 5 6 
         // 7 8 9
-
         return 3*(row/3) +(col/3)+1;
     }
 
     public static void main(String[] args){
         Converter convert = new Converter();
         Matrix sudoku = convert.createComplete();
-        sudoku.print();
-        System.out.println("done");
+        Algx solver = new Algx(sudoku);
+        Result result = solver.solve();
+        int[][] resultgrid = getResultGrid(result);
+        printResultGrid(resultgrid);
     }
+
 }
